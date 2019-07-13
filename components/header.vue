@@ -18,18 +18,18 @@
       </div>
       <!-- 登陆下拉菜单 -->
       <div class="login-users">
-        <div v-if="false">
-          <nuxt-link to="/user/login.vue">登陆/注册</nuxt-link>
+        <div v-if="!$store.state.user.userInfo.token">
+          <nuxt-link to="/user/login">登陆/注册</nuxt-link>
         </div>
-        <div>
+        <div v-else>
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
-                <img src="../static/images/WX20190406-211643@2x.png" alt="">
-              猪油蛇皮香蕉牛奶<i class="el-icon-arrow-down el-icon--right"></i>
+              <img :src="$axios.defaults.baseURL + $store.state.user.userInfo.user.defaultAvatar" alt="">
+              {{$store.state.user.userInfo.user.nickname}} <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item icon="el-icon-circle-plus">个人中心</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-circle-plus-outline">退出</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-plus-outline" @click.native="handleLogout()">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -40,7 +40,16 @@
 
 <script>
 export default {
-
+  methods: {
+    handleLogout() {
+      const { commit } = this.$store
+      commit('user/cleanUserInfo')
+      this.$message({
+        message: '退出成功',
+        type: 'success'
+      })
+    }
+  }
 }
 </script>
 
@@ -99,7 +108,7 @@ export default {
   }
 }
 .login-users {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>
 
