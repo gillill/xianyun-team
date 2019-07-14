@@ -23,14 +23,17 @@
 
 <script>
 import LoginForm from '@/components/user/loginForm'
+import RegisterForm from '@/components/user/registerForm'
 export default {
   data() {
     return {
-      currentTab: 0
+      currentTab: 0,
+      
     }
   },
   components: {
-    LoginForm
+    LoginForm,
+    RegisterForm
   },
   methods: {
     handleChangeTab(index) {
