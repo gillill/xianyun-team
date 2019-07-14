@@ -45,102 +45,133 @@ export default {
       ],
       currentTab: 0,
       form: {
-          departCity: '',
-          destCity: '',
-          departDate: '',
-          departCode: '',
-          destCode: ''
+        departCity: '',
+        destCity: '',
+        departDate: '',
+        departCode: '',
+        destCode: ''
       }
     }
   },
   methods: {
     // tab切换时触发
     handleSearchTab(item, index) {
-
+      if (index === 1) {
+        this.$message.warning('往返的数据库暂时没有数据')
+      }
     },
 
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDepartSearch(value, cb) {
-      if(!value.trim()) {
+      if (!value.trim()) {
         //   隐藏下拉框
-          cb([])
-          return
+        cb([])
+        return
       }
       this.$axios({
-          url:'/airs/city',
-          params: {
-              name: value
+        url: '/airs/city',
+        params: {
+          name: value
+        }
+      }).then(res => {
+        console.log(res)
+        const { data } = res.data
+        const newData = data.map(v => {
+          return {
+            ...v,
+            value: v.name.replace('市', '')
           }
-      }).then(res=>{
-          console.log(res)
-          const {data} = res.data
-          const newData = data.map(v=>{
-              return {
-                  ...v,
-                  value: v.name.replace('市', '')
-              }
-          })
-          this.form.departCity = newData[0].value
-          this.form.departCode = newData[0].sort
-          cb(newData)
+        })
+        this.form.departCity = newData[0].value
+        this.form.departCode = newData[0].sort
+        cb(newData)
       })
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDestSearch(value, cb) {
-      if(!value.trim()) {
-          cb([])
-          return
+      if (!value.trim()) {
+        cb([])
+        return
       }
       this.$axios({
-          url:'/airs/city',
-          params: {
-              name: value
+        url: '/airs/city',
+        params: {
+          name: value
+        }
+      }).then(res => {
+        const { data } = res.data
+        const newData = data.map(v => {
+          return {
+            ...v,
+            value: v.name.replace('市', '')
           }
-      }).then(res=>{
-          const {data} = res.data
-          const newData = data.map(v=>{
-              return {
-                  ...v,
-                  value: v.name.replace('市', '')
-              }
-          })
-          this.form.destCity = newData[0].value
-          this.form.destCode = newData[0].sort
-          cb(newData)
+        })
+        this.form.destCity = newData[0].value
+        this.form.destCode = newData[0].sort
+        cb(newData)
       })
     },
 
     // 出发城市下拉选择时触发
     handleDepartSelect(item) {
-        this.form.departCity = item.value
-        this.form.departCode = item.sort
+      this.form.departCity = item.value
+      this.form.departCode = item.sort
     },
 
     // 目标城市下拉选择时触发
     handleDestSelect(item) {
-        this.form.destCity = item.value
-        this.form.destCode = item.sort
+      this.form.destCity = item.value
+      this.form.destCode = item.sort
     },
 
     // 确认选择日期时触发
     handleDate(value) {
-        this.form.departDate = moment(value).format('YYYY-MM-DD')
+      this.form.departDate = moment(value).format('YYYY-MM-DD')
     },
 
     // 触发和目标城市切换时触发
     handleReverse() {
+      const { departCity, departCode, destCity, destCode } = this.form
+      this.form.departCity = destCity
+      this.form.departCode = destCode
 
+      this.form.destCity = departCity
+      this.form.destCode = departCode
     },
 
     // 提交表单是触发
     handleSubmit() {
+      const rules = {
+        departCity: {
+          value: this.form.departCity,
+          message: '请选择出发城市'
+        },
+        destCity: {
+          value: this.form.destCity,
+          message: '请选择达到城市'
+        },
+        departDate: {
+          value: this.form.departDate,
+          message: '请选择出发日期'
+        }
+      }
+      let valid = true
+      Object.keys(rules).forEach(v => {
+        if (!valid) return
+        if (!rules[v].value) {
+          valid = false
+          this.$message.warning(rules[v].message)
+        }
+      })
+      if (valid) {
         this.$router.push({
-            path:'/air/flights',
-            query: this.form
+          path: '/air/flights',
+          query: this.form
         })
+      }
     }
   },
   mounted() {
