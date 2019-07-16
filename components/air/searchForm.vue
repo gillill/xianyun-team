@@ -64,54 +64,49 @@ export default {
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDepartSearch(value, cb) {
-      if (!value.trim()) {
-        //   隐藏下拉框
-        cb([])
-        return
-      }
-      this.$axios({
-        url: '/airs/city',
-        params: {
-          name: value
+      this.querySearchCity(value).then(arr => {
+        if (arr.length > 0) {
+          this.form.departCity = arr[0].value
+          this.form.departCode = arr[0].sort
         }
-      }).then(res => {
-        console.log(res)
-        const { data } = res.data
-        const newData = data.map(v => {
-          return {
-            ...v,
-            value: v.name.replace('市', '')
-          }
-        })
-        this.form.departCity = newData[0].value
-        this.form.departCode = newData[0].sort
-        cb(newData)
+        cb(arr)
       })
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
-    queryDestSearch(value, cb) {
-      if (!value.trim()) {
-        cb([])
-        return
+    async queryDestSearch(value, cb) {
+      const arr = await this.querySearchCity(value)
+      if (arr.length > 0) {
+        this.form.destCity = arr[0].value
+        this.form.destCode = arr[0].sort
       }
-      this.$axios({
-        url: '/airs/city',
-        params: {
-          name: value
+      cb(arr)
+    },
+
+    querySearchCity(queryString) {
+      return new Promise((resolve, reject) => {
+        if (!queryString.trim()) {
+          //   隐藏下拉框
+          resolve([])
+          return
         }
-      }).then(res => {
-        const { data } = res.data
-        const newData = data.map(v => {
-          return {
-            ...v,
-            value: v.name.replace('市', '')
+        this.$axios({
+          url: '/airs/city',
+          params: {
+            name: queryString
           }
+        }).then(res => {
+          console.log(res)
+          const { data } = res.data
+          const newData = data.map(v => {
+            return {
+              ...v,
+              value: v.name.replace('市', '')
+            }
+          })
+          resolve(newData)
         })
-        this.form.destCity = newData[0].value
-        this.form.destCode = newData[0].sort
-        cb(newData)
       })
     },
 
@@ -142,7 +137,7 @@ export default {
       this.form.destCode = departCode
     },
 
-    // 提交表单是触发
+    // 提交表单时触发
     handleSubmit() {
       const rules = {
         departCity: {
