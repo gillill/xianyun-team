@@ -5,9 +5,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <div>
-
-        </div>
+        <FlightsFilters :data='flightsData' />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -33,11 +31,14 @@
 import moment from "moment";
 import FlightsListHead from '@/components/air/flightsListHead.vue'
 import FlightsItem from '@/components/air/FlightsItem.vue'
+import FlightsFilters from '@/components/air/FlightsFilters.vue'
 
 export default {
   data() {
     return {
-      flightsData: {},
+      flightsData: {
+        flights: []
+      },
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
@@ -46,7 +47,8 @@ export default {
   },
   components: {
     FlightsListHead,
-    FlightsItem
+    FlightsItem,
+    FlightsFilters
   },
   mounted() {
     this.$axios({
@@ -97,5 +99,8 @@ export default {
 
 .aside {
   width: 240px;
+}
+.el-pagination {
+  padding: 2px 20%;
 }
 </style>
