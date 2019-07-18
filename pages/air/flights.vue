@@ -19,7 +19,7 @@
       </div>
 
       <!-- 侧边栏 -->
-      <FlightsAside/>
+      <FlightsAside />
     </el-row>
   </section>
 </template>
@@ -40,10 +40,10 @@ export default {
         info: {},
         options: {}
       },
-      cacheFlightsData:{
-        flights:[],
-        info:{},
-        options:{}
+      cacheFlightsData: {
+        flights: [],
+        info: {},
+        options: {}
       },
       pageIndex: 1,
       pageSize: 10,
@@ -57,31 +57,38 @@ export default {
     FlightsAside
   },
   computed: {
-      dataList () {
-          return this.flightsData.flights.slice(
-              (this.pageIndex - 1) * this.pageSize,
-              this.pageSize * this.pageIndex
-          )
-      }
+    dataList() {
+      return this.flightsData.flights.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageSize * this.pageIndex
+      )
+    }
   },
-  watch: {
-      $router() {
+  //   watch: {
+  //       $router() {
 
-      }
+  //       }
+  //   },
+  beforeRouterUpdate(to, from, next) {
+    next()
+    this.getDate()
   },
   mounted() {
-    this.$axios({
-      url: '/airs',
-      method: 'get',
-      params: this.$route.query
-    }).then(res => {
-      //   const {flights} = res.data
-      this.flightsData = res.data
-      this.cacheFlightsData = {...res.data}
-      this.total = this.flightsData.flights.length
-    })
+      this.getDate()
   },
   methods: {
+    getDate() {
+      this.$axios({
+        url: '/airs',
+        method: 'get',
+        params: this.$route.query
+      }).then(res => {
+        //   const {flights} = res.data
+        this.flightsData = res.data
+        this.cacheFlightsData = { ...res.data }
+        this.total = this.flightsData.flights.length
+      })
+    },
     // 条数切换, value是当前选中的条数
     handleSizeChange(value) {
       this.pageSize = value;
@@ -91,7 +98,7 @@ export default {
       this.pageIndex = value;
     },
     changeDataList(arr) {
-        this.flightsData.flights = arr
+      this.flightsData.flights = arr
     }
   }
 }
