@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment, {localeData} from 'moment'
 export default {
   data() {
     return {
@@ -167,6 +167,9 @@ export default {
           query: this.form
         })
       }
+      const aris = JSON.parse(localStorage.getItem('airs') || `[]`)
+      aris.unshift(this.form)
+      localStorage.setItem('airs', JSON.stringify(aris))
     }
   },
   mounted() {
