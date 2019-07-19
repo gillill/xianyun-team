@@ -63,6 +63,7 @@
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
       </div>
     </div>
+    <input type="hidden" :value="allPrice">
   </div>
 </template>
 
@@ -93,6 +94,20 @@ export default {
       }
     }
   },
+  computed: {
+    allPrice() {
+      if(!this.infoData.airport_tax_audlet) return ''
+
+      let price = 0
+      price += this.infoData.seat_infos.org_settle_price
+      price += this.infoData.airport_tax_audlet
+      price += this.insurances.length * 30
+      price *= this.users.length
+      this.$store.commit('air/setAllPrice', price)
+
+      return price
+    }
+  },
   methods: {
     // 添加乘机人
     handleAddUsers() {
@@ -105,7 +120,7 @@ export default {
     },
 
     // 移除乘机人
-    handleDeleteUse(index) {
+    handleDeleteUser(index) {
       this.users.splice(index, 1)
     },
     handleIsurances(item) {

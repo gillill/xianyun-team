@@ -37,7 +37,7 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="info-bar">
       <span>应付总额：</span>
-      <span class="price">￥ </span>
+      <span class="price">￥{{$store.state.air.allPrice}} </span>
     </el-row>
   </div>
 </template>
@@ -54,7 +54,21 @@ export default {
   },
   computed: {
     rankTime() {
-      return 123;
+      if(!this.data.arr_time) return ''
+      const arr = this.data.arr_time.split(':')
+      const dep = this.data.dep_time.split(':')
+
+      if(dep[0] > arr[0]) {
+          arr[0] += 24
+      }
+      const end = arr[0]*60 + +arr[1]
+      const start = dep[0]*60 + +dep[1]
+
+      const dis = end - start
+      const hours = Math.floor(dis/60)
+      const min = dis%60
+      
+      return `${hours}小时${min}分钟`
     }
   },
 }
