@@ -64,13 +64,14 @@ export default {
           //   console.log(res.data)
           // })
           this.$store.dispatch('user/login',this.form).then(res=>{
-            this.$message({
-              message:'登陆成功, 正在跳转',
-              type:'success'
-            })
-            setTimeout(()=>{
-              this.$router.replace('/')
-            },1000)
+            // this.$message({
+            //   message:'登陆成功, 正在跳转',
+            //   type:'success'
+            // })
+            // setTimeout(()=>{
+            //   this.$router.replace('/')
+            // },1000)
+            this.$router.back()
           })
         }
       })

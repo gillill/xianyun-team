@@ -167,9 +167,9 @@ export default {
           query: this.form
         })
       }
-      const aris = JSON.parse(localStorage.getItem('airs') || `[]`)
-      aris.unshift(this.form)
-      localStorage.setItem('airs', JSON.stringify(aris))
+      const airs = JSON.parse(localStorage.getItem('airs') || `[]`)
+      airs.unshift(this.form)
+      localStorage.setItem('airs', JSON.stringify(airs))
     }
   },
   mounted() {

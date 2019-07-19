@@ -99,6 +99,8 @@ export default {
     },
     changeDataList(arr) {
       this.flightsData.flights = arr
+      this.total = this.flightsData.flights.length
+      this.pageIndex = 1
     }
   }
 }
