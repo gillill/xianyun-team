@@ -3,9 +3,7 @@
     <div class="air-column">
       <h2>剩机人</h2>
       <el-form class="member-info">
-        <div class="member-info-item"
-        v-for="(item, index) in users"
-        :key="index">
+        <div class="member-info-item" v-for="(item, index) in users" :key="index">
 
           <el-form-item label="乘机人类型">
             <el-input placeholder="姓名" class="input-with-select" v-model="users[index].username">
@@ -68,6 +66,7 @@
 </template>
 
  <script>
+import { setTimeout } from 'timers';
 export default {
   // props: {
   //   data: {
@@ -78,8 +77,8 @@ export default {
   data() {
     return {
       users: [{
-        username:'',
-        id:''
+        username: '',
+        id: ''
       }],
       insurances: [],
       contactName: '',
@@ -90,13 +89,13 @@ export default {
       air: '',
       infoData: {
         insurances: [],
-        seat_infos:{}
+        seat_infos: {}
       }
     }
   },
   computed: {
     allPrice() {
-      if(!this.infoData.airport_tax_audlet) return ''
+      if (!this.infoData.airport_tax_audlet) return ''
 
       let price = 0
       price += this.infoData.seat_infos.org_settle_price
@@ -112,9 +111,9 @@ export default {
     // 添加乘机人
     handleAddUsers() {
       this.users = [
-        ...this.users,{
-          username:'',
-          id:''
+        ...this.users, {
+          username: '',
+          id: ''
         }
       ]
     },
@@ -125,9 +124,9 @@ export default {
     },
     handleIsurances(item) {
       const index = this.insurances.indexOf(item.id)
-      if(index>-1) {
-        this.insurances.splice(index,1)
-      }else{
+      if (index > -1) {
+        this.insurances.splice(index, 1)
+      } else {
         this.insurances.push(item.id)
       }
       // console.log(index)
@@ -135,13 +134,13 @@ export default {
 
     // 发送手机验证码
     handleSendCaptcha() {
-      if(!this.contactPhone) {
-        this.$alert('请输入手机号码','提示', {
-          type: warning
+      if (!this.contactPhone) {
+        this.$alert('请输入手机号码', '提示', {
+          type: 'warning'
         })
         return
       }
-      this.$store.dispatch('user/sendCode', this.contactPhone) .then(code=>{
+      this.$store.dispatch('user/sendCode', this.contactPhone).then(code => {
         this.$alert(`模拟验证码: ${code}`, '提示', {
           type: 'warning'
         })
@@ -161,7 +160,7 @@ export default {
       }
       const rules = {
         users: {
-          value: this.users[0].username && this.users[0].id,
+          value: this.users,
           message: '乘机人不能为空',
         },
         contactName: {
@@ -178,35 +177,56 @@ export default {
         }
       }
       let invalid = true
-      Object.keys(rules).forEach(v=>{
-        if(!invalid) return
-        if(!rules[v].value) {
+
+      Object.keys(rules).forEach(v => {
+        if (!invalid) return
+
+        if (v === 'users') {
+
+          rules[v].value.map(user => {
+            if (!invalid) return
+
+            if (!(user.username && user.id)) {
+              invalid = false
+              this.$message.warning(rules[v].message)
+            }
+          })
+        }
+        if (!rules[v].value) {
           invalid = false
           this.$message.warning(rules[v].message)
         }
       })
-      if(!invalid) return
+      if (!invalid) return
       this.$axios({
-        url:'/airorders',
-        methods:'post',
+        url: '/airorders',
+        method: 'post',
         data,
         headers: {
           Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
-      }).then(res=>{
+      }).then(res => {
+        console.log(res)
+        // this.$message.success('订单提交成功，正在跳转...')
+        // const [data] = res.data
+        const {data} = res.data
+        console.log(data)
         this.$message.success('订单提交成功，正在跳转...')
+        setTimeout(() => {
+          this.$router.push('/air/pay?id=' + data.id)
+        }, 1000)
       })
     }
   },
   mounted() {
-    const {id,seat_xid} = this.$route.query
+    const { id, seat_xid } = this.$route.query
     this.$axios({
       url: 'airs/' + id,
       params: {
         seat_xid,
       }
-    }).then(res=>{
-      const {data} = res
+    }).then(res => {
+      const { data } = res
       this.infoData = data
       this.$store.commit('air/setInfoData', data)
     })
