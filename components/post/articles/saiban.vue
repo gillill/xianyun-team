@@ -4,7 +4,7 @@
       <h1>{{postData.title}}</h1>
       <hr>
       <div class="read ">
-        <span>攻略:{{postData.updated_at}}</span>
+        <span>攻略:{{postData.updated_at |timeFormat}}</span>
         <span>阅读:{{postData.watch}}</span>
       </div>
       <!-- 文章具体内容展示 -->
@@ -46,11 +46,11 @@ props: {
         
     }
   },
-  // filters: {
-  //   createdTime:(value)=>{
-  //    value= moment(value).format('YYYY-MM-DD')
-  //   }
-  // }
+  filters: {
+    timeFormat:function(value){
+      return value=moment().format('YYYY-MM-DD, hh:mm')
+    }
+  },
 }
 </script>
 

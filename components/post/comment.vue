@@ -3,7 +3,7 @@
     <footer>
     <ul>
       <li><span class="iconfont icon-bianji"></span> <p>评论(1)</p></li>
-      <li><span class="iconfont icon-shoucang"></span> <p>收藏</p></li>
+      <li @click="handleShoucang"><span class="iconfont icon-shoucang"></span> <p>收藏</p></li>
       <li><span class="iconfont icon-icon-test"></span> <p>分享</p></li>
       <li><span class="iconfont icon-dianzan"></span> <p>点赞(1)</p></li>
     </ul>
@@ -36,10 +36,13 @@
 </div>
 <!--p]评论列表 -->
 <div class="commentList">
- <li>
-   <p><img src="" alt="" class="userAvatar"> 地球发动机  2019-07-21 3:25</p>
-   <p></p>
-   <img src="http://157.122.54.189:9095/uploads/ab2fdb517f9e4a5e81fc1cefaaaf5e4d.jpg"  alt="" class="userImage">
+ <li v-for="(item,index) in commentList" :key="index">
+   <p><img :src=item.account.defaultAvatar alt="" class="userAvatar"> 
+   {{item.account.nickname}}  
+   {{item.updated_at | timeFormat}}
+   </p>
+   <p>{{item.content}}</p>
+   <img :src=item2  alt="" class="userImage" v-for="(item2,index2) in item.pics" :key="index2">
  </li>
 </div>
 
@@ -47,11 +50,11 @@
  <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="1"
+      :current-page="currentPage-0"
       :page-sizes="[1, 2, 3, 4]"
-      :page-size="100"
+      :page-size="pageSize-0"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="400">
+      :total="total-0">
     </el-pagination>
 
 </footer>
@@ -59,13 +62,24 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
+  
   data(){
     return{
       commentText:"",
       dialogVisible:"",
       dialogImageUrl:"",
-    
+       id:4,
+       total:"",
+       currentPage:"",
+       pageSize:"",
+       commentList:[]
+    }
+  },
+  filters: {
+    timeFormat:function(value){
+      return value=moment().format('YYYY-MM-DD, hh:mm')
     }
   },
   methods: {
@@ -77,10 +91,27 @@ export default {
         this.dialogVisible = true;
       },
        handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        // console.log(`每页 ${val} 条`);
+        this.pageSize=val
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        // console.log(`当前页: ${val}`);
+        this.currentPage=val
+      },
+      handleShoucang(){
+        this.$axios({
+          url:"/posts/star",
+          params:{
+            id:4
+          },
+          headers: {
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+        }
+        }).then(res=>{
+          if(res.data.status===0){
+        this.$message.success(res.data.message)
+      }
+        })
       }
   },
   mounted () {
@@ -88,12 +119,16 @@ export default {
       url:"/posts/comments",
       params:{
         post:4,
-        _sort:"systemSort",
-        _limit:2,
-        _start:1,
+        // _sort:"systemSort",
+        _limit:6,
+        _start:0,
       }
     }).then(res=>{
-      console.log(res);
+      // console.log(res,245);
+      this.commentList=res.data.data
+      console.log(this.commentList,99);
+      this.total=res.data.data.length
+      
      
     })
   }
@@ -108,14 +143,21 @@ export default {
   margin: 0 auto;
   footer{
     width:700px;
+    ul{
+       li{
+         cursor:pointer
+       }
+     }
     .userInput{
      position: relative;
+     
     }
     .commentList{
       margin:30px 0;
       li{
         border: 1px solid #ccc;
         padding:20px;
+        // cursor: pointer;
         p{
           .userAvatar{
             width: 20px;

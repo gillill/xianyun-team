@@ -3,14 +3,14 @@
  <h4>相关攻略</h4>
 
    <div class="correlationList">
-    <li>
+    <li v-for="(item,index) in correlationList" :key="index">
       <div class="correlation_image">
-        <img src="http://157.122.54.189:9095/uploads/ab2fdb517f9e4a5e81fc1cefaaaf5e4d.jpg" alt="">
+        <img :src=item.images[0] alt="">
       </div>
       <div class="correlation_text">
-        <p>文章的标题</p>
+        <p>{{item.title}}</p>
         <div class="correlation_detail">
-          <span>2019-07-21 3:50</span> <span>阅读</span>
+          <span >{{item.updated_at |timeFormat}}</span> <span>阅读{{item.watch}}</span>
         </div>
       </div>
     </li>
@@ -21,10 +21,29 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   data(){
-  return{   
+  return{ 
+    correlationList:[] 
   }
+  },
+  filters: {
+    timeFormat:function(value){
+      return value=moment().format('YYYY-MM-DD, hh:mm')
+    }
+  },
+  mounted () {
+     this.$axios({
+       url:"/posts/recommend",
+       parmas:{
+         id:4
+       }
+     }).then(res=>{
+       console.log(res,123);
+      this.correlationList=res.data.data
+       
+     })
   }
 }
 </script>
@@ -36,11 +55,20 @@ export default {
      border-bottom: 1px solid #ccc;
      padding:30px 0;
      width: 280px;
+     display: flex;
+     justify-content: space-between;
      .correlation_image{
        img{
          width: 80px;
          height: 80px;
        }
+     }
+     p{
+       margin-bottom: 20px;
+     }
+     .correlation_detail{
+       color: #ccc;
+       font-size: 14px;
      }
    }
 }
