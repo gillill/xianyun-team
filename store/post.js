@@ -5,3 +5,4 @@ export const state = () => ({
 export const mutations = {
     setData(state, data){}
 }
+
