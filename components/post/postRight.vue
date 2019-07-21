@@ -109,12 +109,14 @@
         </el-row>
 
       </div>
-    </div>
 
-    <div class="block">
+      <div class="block">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[3, 5, 8, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="100">
       </el-pagination>
     </div>
+    </div>
+
+    
   </div>
 </template>
 
@@ -131,9 +133,17 @@ export default {
     return {
       pageIndex: 1,
       pageSize: 10,
-      //   total: 0
+      total:0
     }
   },
+//   computed: {
+//       datas() {
+//           return this.datas.data.slice(
+//             (this.pageIndex - 1) * this.pageSize,
+//             this.pageSize * this.pageIndex
+//           )
+//       }
+//   },
   methods: {
     handleSizeChange() {
 
