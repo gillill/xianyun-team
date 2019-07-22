@@ -4,7 +4,7 @@
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item v-for="(item,index) in data" :key="index" :title="item.type" :name="index">
           <div class="nav-box" v-for="(item,index) in item.children" :key="index">
-            <a href="javascript:;"><span>{{index+1}}</span>
+            <a href="javascript:;" @click.prevent="handleCityClick(item.city)"><span>{{index+1}}</span>
               <i>{{item.city}}</i></a>
             <a href="javascript:;">{{item.desc}}</a>
           </div>
@@ -33,6 +33,16 @@ export default {
       activeName: '1'
     };
   },
+  methods: {
+      handleCityClick(item) {
+        this.$axios({
+            url:'/posts?city='+item
+        }).then(res=>{
+            console.log(res)
+          this.$store.commit('post/setCicy', res.data)
+        })
+      }
+  }
 }
 </script>
 

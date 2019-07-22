@@ -1,14 +1,12 @@
 <template>
   <div class="right-box">
     <div class="search">
-      <el-input placeholder="请输入内容">
+      <el-input placeholder="请输入内容" v-model="input">
         <el-button slot="append" icon="el-icon-search"></el-button>
       </el-input>
       <div class="tuijian">
         推荐:
-        <a href="javaScript:;">广州</a>
-        <a href="javaScript:;">上海</a>
-        <a href="javaScript:;">北京</a>
+        <a href="javaScript:;" v-for="(item,index) in cityData" :key="index" @click.prevent="handleCity(item)">{{item}} </a>
       </div>
     </div>
 
@@ -55,7 +53,7 @@
           <a href="" v-for="(items,index) in item.images" v-if="index<1" :key="index"><img :src="items" alt=""></a>
         </el-col>
         <el-col :span="16">
-          <h3><a href="">{{item.title}}</a></h3>
+          <h3 class="a-hover"><a href="" @click.prevent="handleClick(item.id)">{{item.title}}</a></h3>
           <p><a href="">{{item.summary}}</a></p>
           <!-- 文章下面烦得一逼的小图标 -->
           <el-row type="flex" justify="space-between" class="tjone-bottom">
@@ -80,7 +78,7 @@
         </el-col>
       </el-row>
       <el-row v-else>
-        <h3><a href="">{{item.title}}</a></h3>
+        <h3 class="a-hover"><a href="" @click.prevent="handleClick(item.id)">{{item.title}}</a></h3>
         <p><a href="">{{item.summary}}</a></p>
         <el-row type='flex' justify="space-between" align="center" class="method-imgbox">
           <a href="" v-for="(items,index) in item.images" v-if="index<3" :key="index"><img :src="items" alt=""></a>
@@ -132,11 +130,14 @@ export default {
 
   data() {
     return {
-      data: [],
+      input: "",
       //   dataList: [],
       pageIndex: 1,
       pageSize: 3,
-      total: 0
+      total: 0,
+      cityData: [
+        "广州", "上海", "北京"
+      ]
 
     }
   },
@@ -150,6 +151,23 @@ export default {
       this.pageIndex = value
       // this.setDataList()
     },
+    handleClick(id) {
+      this.$router.push({
+        path: '/post/detail',
+        query: {
+          id
+        }
+      })
+    },
+    handleCity(item) {
+      this.$axios({
+        url: '/posts?city=' + item
+      }).then(res => {
+        this.data = res.data.data
+      this.$store.commit('post/setCicy', res.data)
+      })
+    },
+
     // setDataList() {
     //   this.dataList = this.data.total.slice(
     //     (this.pageIndex - 1) * this.pageSize,
@@ -168,19 +186,18 @@ export default {
       this.total = res.data.total
       this.data = data
       console.log(this.data)
+      this.$store.commit('post/setCicy', res.data)
+
     })
   },
   computed: {
     dataList() {
-      if (this.data.length > 0) {
-        let postsData = this.data.slice(
-          (this.pageIndex - 1) * this.pageSize,
-          this.pageSize * this.pageIndex
-        )
-        return postsData
-      } else {
-        return []
-      }
+      let data = this.$store.state.post.cityData.data.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageSize * this.pageIndex
+      );
+      console.log(data);
+      return data;
     }
   },
 }
@@ -312,5 +329,9 @@ export default {
 }
 .block {
   margin-bottom: 20px;
+}
+.tuijian > a:hover,
+.a-hover:hover {
+  color: rgb(46, 94, 149);
 }
 </style>
