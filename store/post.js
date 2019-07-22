@@ -1,8 +1,13 @@
 export const state = () => ({
-    list: [1,2,3]
-    
+    postDatas: { like: ""}
+
 })
 
 export const mutations = {
-    setData(state, data){}
+    setPostData(state, data){
+        state.postDatas=data
+    },
+    setPostDataLike(state,data){
+        state.postDatas.like=data
+    }
 }
