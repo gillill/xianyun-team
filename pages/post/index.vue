@@ -15,7 +15,8 @@ export default {
   data() {
     return {
       data:[],
-      datas:[]
+      datas:[],
+      total:[]
     }
   },
   mounted() {
@@ -29,14 +30,15 @@ export default {
       this.data = data
       // console.log(this.data)
     })
-    this.$axios({
-      url:'/posts',
-      method:'get',
-    }).then(res=>{
-      console.log(res)
-      const {data} = res.data
-      this.datas = data
-    })
+    // this.$axios({
+    //   url:'/posts',
+    //   method:'get',
+    // }).then(res=>{
+    //   console.log(res)
+    //   const {data} = res.data
+    //   this.datas = data
+    //   this.total = this.datas.length
+    // })
     // this.$axios({
     //   url:'/postkinds',
     //   method:'get',
