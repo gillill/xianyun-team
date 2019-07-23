@@ -3,7 +3,7 @@
     <Search/>
     <Map/>
     <HotelFilters/>
-    <HotelsList :data="hotelsData"/>
+    <HotelsList v-for='(item,i) in hotelsData.data'  :key="i" :data="item"/>
   </div>
 </template>
 
@@ -21,9 +21,7 @@ export default {
   },
   data() {
     return {
-      hotelsData:{
-        dataList:{}
-      }
+      hotelsData:{}
     }
   },
   methods: {
@@ -37,13 +35,15 @@ export default {
         // console.log(res);
         const {data} = res
         this.hotelsData = data
+        console.log(this.hotelsData);
+        
       })
     }
 }
 </script>
 
 <style lang="less" scoped>
-  .container {
+.container {
   width: 1000px;
   margin: 5px auto;
   font-size: 14px;

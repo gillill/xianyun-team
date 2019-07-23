@@ -103,7 +103,7 @@
                   :text-inside="true"
                   :stroke-width="3"
                   :percentage="25"
-                   color="#f90"
+                  color="#f90"
                 ></el-progress>
               </el-col>
               <el-col :span="6" class="circle">
@@ -125,7 +125,7 @@
                   :text-inside="true"
                   :stroke-width="3"
                   :percentage="25"
-                   color="#f90"
+                  color="#f90"
                 ></el-progress>
               </el-col>
             </el-row>
@@ -146,6 +146,17 @@ export default {
   },
   data() {
     return {
+      hotelinfo:[{
+        address:'',
+        alias:'',
+        city:'',
+        price_in	:'',
+        scenic:'',
+        hotellevel:'',
+        hoteltype:'',
+        hotelbrand:'',
+        hotelasset:''
+      }],
       imgList: [
         { id: 1, url: "http://157.122.54.189:9093/images/hotel-pics/1.jpeg" },
         { id: 2, url: "http://157.122.54.189:9093/images/hotel-pics/2.jpeg" },
@@ -162,6 +173,20 @@ export default {
     changeImg(url) {
       this.displayUrl = url;
     }
+  },
+  mounted() {
+    const { id } = this.$route.query;
+
+    this.$axios({
+      url: "/hotels"
+    }).then(res => {
+      const { data } = res.data;
+
+      this.hotelinfo = data.filter(v => {
+        return v.id === id * 1;
+      });
+      console.log(this.hotelinfo);
+    });
   }
 };
 </script>
@@ -244,13 +269,13 @@ export default {
             left: -22px;
           }
         }
-        .circle{
-            position: relative;
-            .circle-item{
-                position: absolute;
-                top: 18px;
-                left: 25px;
-            }
+        .circle {
+          position: relative;
+          .circle-item {
+            position: absolute;
+            top: 18px;
+            left: 25px;
+          }
         }
       }
     }
