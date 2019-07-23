@@ -1,36 +1,45 @@
 <template>
   <div class="container">
-    <Search />
-    <Map />
-    <HotelFilters />
-    <nuxt-link :to="`/hotel/hoteldetails?id=1`">跳转</nuxt-link>
+    <Search/>
+    <Map/>
+    <HotelFilters/>
+    <HotelsList :data="hotelsData"/>
   </div>
 </template>
 
 <script>
-import Search from "@/components/hotel/search";
-import Map from "@/components/hotel/map";
-import HotelFilters from "@/components/hotel/hotelFilters";
+import Search from "@/components/hotel/search"
+import Map from "@/components/hotel/map"
+import HotelFilters from "@/components/hotel/hotelFilters"
+import HotelsList from "@/components/hotel/hotelsList"
 export default {
   components: {
     Search,
     Map,
-    HotelFilters
+    HotelFilters,
+    HotelsList
   },
   data() {
-    return {};
+    return {
+      hotelsData:{
+        dataList:{}
+      }
+    }
   },
   methods: {
-    
-  },
-  mounted() {
-    this.$axios({
-      url: `/hotels`
-    }).then(res => {
-      console.log(res);
-    });
-  }
-};
+  
+    },
+    mounted() {
+      this.$axios({
+        url:`/hotels`,
+        method:"GET"
+      }).then(res=>{
+        // console.log(res);
+        const {data} = res
+        this.hotelsData = data
+      })
+    }
+}
 </script>
 
 <style lang="less" scoped>

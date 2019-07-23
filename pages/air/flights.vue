@@ -83,6 +83,8 @@ export default {
         method: 'get',
         params: this.$route.query
       }).then(res => {
+        console.log(res);
+        
         //   const {flights} = res.data
         this.flightsData = res.data
         this.cacheFlightsData = { ...res.data }
