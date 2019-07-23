@@ -213,6 +213,7 @@ export default {
       background-color: #fff;
       padding: 10px 10px;
       position: absolute;
+      z-index: 10;
       right:10.3%;
       width: 300px;
       height: 120px;
