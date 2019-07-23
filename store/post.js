@@ -1,6 +1,10 @@
-export const state = () => ({
-    list: [1,2,3]
-})
+export const state = () => {
+    return {
+        cityData:{
+            data:[]
+        }
+    }
+}
 
 export const mutations = {
     setData(state, data){}

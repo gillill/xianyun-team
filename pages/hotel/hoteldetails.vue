@@ -1,85 +1,259 @@
 <template>
-  <div class="container">
-    <div>
-      <div class="main">
-        <span>酒店</span>>
-        <span>南京酒店</span>>
-        <span>好来阁商务酒店</span>
-        <h2 class="binguanname">好来阁商务宾馆</h2>
-        <p class="Englishname">hao lai ge shang wu hotel</p>
-        <p class="address">高淳县淳溪镇镇兴路118号(高淳县委党校对面)</p>
+  <div class="detail">
+    <!-- 面包屑 -->
+    <div class="detail-crumbs">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '#' }">酒店</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '#' }">南京酒店</el-breadcrumb-item>
+        <el-breadcrumb-item>好来阁商务宾馆</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
+    <!-- 详情信息 -->
+    <div class="detail-info">
+      <span class="name">好来阁商务宾馆</span>
+      <i class="iconfont iconhuangguan"></i>
+      <i class="iconfont iconhuangguan"></i>
+      <i class="iconfont iconhuangguan"></i>
+      <i class="iconfont iconhuangguan"></i>
+      <i class="iconfont iconhuangguan"></i>
+      <p>hao lai ge shang wu hotel</p>
+      <i class="el-icon-location icon"></i>
+      <span>高淳县淳溪镇镇兴路118号(高淳县委党校对面)</span>
+    </div>
+    <!-- 图片详情 -->
+    <div class="detail-img">
+      <el-row>
+        <el-col :span="16">
+          <div class="img-left">
+            <img :src="displayUrl" alt />
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="img-right">
+            <el-row type="flex" justify="center">
+              <el-col :span="24">
+                <div
+                  class="img-item"
+                  v-for="(item,index) in imgList"
+                  :key="index"
+                  @click="changeImg(item.url)"
+                >
+                  <img :src="item.url" alt />
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <!-- 地图组件 -->
+    <Hotelmap />
+    <!-- 基本信息 -->
+    <div class="baseinfo">
+      <el-row class="base-item">
+        <el-col :span="4">基本信息</el-col>
+        <el-col :span="5">入住时间: 14:00之后</el-col>
+        <el-col :span="5">离店时间: 12:00之前</el-col>
+        <el-col :span="5">2014年开业 / 2014年装修</el-col>
+        <el-col :span="5">酒店规模: 119间客房</el-col>
+      </el-row>
+      <el-row class="base-item">
+        <el-col :span="4">主要设施</el-col>
+        <el-col :span="20">入住时间: 14:00之后</el-col>
+      </el-row>
+      <el-row class="base-item">
+        <el-col :span="4">停车服务</el-col>
+        <el-col :span="20">-</el-col>
+      </el-row>
+      <el-row class="base-item">
+        <el-col :span="4">品牌信息</el-col>
+        <el-col :span="20">-</el-col>
+      </el-row>
+    </div>
+    <!-- 评论 -->
+    <div class="comment">
+      <div class="com-haed">
+        <p>10条真实用户评论</p>
+        <el-row>
+          <el-col :span="4">
+            <el-row :span="8">总评数：82</el-row>
+            <el-row :span="8">好评数：14</el-row>
+            <el-row :span="8">差评数：6</el-row>
+          </el-col>
+          <el-col :span="20">
+            <el-row class="server">
+              <el-col :span="6">
+                <div class="recommend">
+                  <div class="star">推荐</div>
+                  <el-rate
+                    v-model="value"
+                    disabled
+                    show-score
+                    text-color="#ff9900"
+                    score-template="{value}"
+                    class="good"
+                  ></el-rate>
+                </div>
+              </el-col>
+              <el-col :span="6" class="circle">
+                <span class="circle-item">环境</span>
+                <el-progress
+                  type="circle"
+                  :width="80"
+                  :text-inside="true"
+                  :stroke-width="3"
+                  :percentage="25"
+                   color="#f90"
+                ></el-progress>
+              </el-col>
+              <el-col :span="6" class="circle">
+                <span class="circle-item">产品</span>
+                <el-progress
+                  type="circle"
+                  :width="80"
+                  :text-inside="true"
+                  :stroke-width="3"
+                  :percentage="25"
+                  color="#f90"
+                ></el-progress>
+              </el-col>
+              <el-col :span="6" class="circle">
+                <span class="circle-item">服务</span>
+                <el-progress
+                  type="circle"
+                  :width="80"
+                  :text-inside="true"
+                  :stroke-width="3"
+                  :percentage="25"
+                   color="#f90"
+                ></el-progress>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
       </div>
-      <div class="binguan"></div>
-      <div class="tupian">
-        <div class="img-left">
-          <img src="http://157.122.54.189:9093/images/hotel-pics/1.jpeg" />
-        </div>
-        <div class="img-right">
-          <div class="img-right-one"><img src="http://157.122.54.189:9093/images/hotel-pics/1.jpeg"></div>
-          <div class="img-right-one"><img src="http://157.122.54.189:9093/images/hotel-pics/2.jpeg"></div>
-          <div class="img-right-one"><img src="http://157.122.54.189:9093/images/hotel-pics/3.jpeg"></div>
-          <div class="img-right-one"><img src="http://157.122.54.189:9093/images/hotel-pics/4.jpeg"></div>
-          <div class="img-right-one"><img src="http://157.122.54.189:9093/images/hotel-pics/5.jpeg"></div>
-          <div class="img-right-one"><img src="http://157.122.54.189:9093/images/hotel-pics/6.jpeg"></div>
-        </div>
-      </div>
+      <!-- <Comment /> -->
     </div>
   </div>
 </template>
-
 <script>
+import Hotelmap from "@/components/hotel/hotelMap";
+// import Comment from "@/components/hotel/comment";
 export default {
+  components: {
+    Hotelmap,
+    // Comment
+  },
   data() {
-    return {};
+    return {
+      imgList: [
+        { id: 1, url: "http://157.122.54.189:9093/images/hotel-pics/1.jpeg" },
+        { id: 2, url: "http://157.122.54.189:9093/images/hotel-pics/2.jpeg" },
+        { id: 3, url: "http://157.122.54.189:9093/images/hotel-pics/3.jpeg" },
+        { id: 4, url: "http://157.122.54.189:9093/images/hotel-pics/4.jpeg" },
+        { id: 5, url: "http://157.122.54.189:9093/images/hotel-pics/5.jpeg" },
+        { id: 6, url: "http://157.122.54.189:9093/images/hotel-pics/6.jpeg" }
+      ],
+      displayUrl: "http://157.122.54.189:9093/images/hotel-pics/1.jpeg",
+      value: 3.5
+    };
+  },
+  methods: {
+    changeImg(url) {
+      this.displayUrl = url;
+    }
   }
 };
 </script>
 
+
 <style lang="less" scoped>
-.container {
+.detail {
   width: 1000px;
   margin: 0 auto;
-  padding: 20px 0;
-  .main {
-    .binguanname {
-      padding-top: 20px;
+  .detail-crumbs {
+    padding: 20px 0;
+  }
+  .detail-info {
+    padding-bottom: 30px;
+    .name {
+      font-size: 25px;
+      font-weight: 600;
     }
-    .Englishname {
-      color: #666;
+    i {
+      color: #f90;
+      font-size: 20px;
     }
-    .address {
-      color: #666;
+    .icon {
+      color: #409eff;
+      font-size: 16px;
     }
   }
-  .tupian{
-    height: 700px;
-    margin-top: 30px;
-    .img-left{
-      float: left;
-      img{
-       width: 640px;
-      height: 342px;
-      }
-     
+  .detail-img {
+    img {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
     }
-    .img-right{
+    .img-left {
+      width: 640px;
       height: 360px;
-      width: 33%;
-      // background-color: red;
-      float: right;
-      .img-right-one{
-        // padding: 0 10px;
-        width: 50%;
+    }
+    .img-right {
+      width: 360px;
+      .img-item {
         float: left;
-        img{
-          width: 160px;
-        padding-left:10px;
-        padding-right: 10px;          
+        width: 160px;
+        height: 110px;
+        padding: 0 14px 14px 0;
+      }
+    }
+  }
+  .baseinfo {
+    .base-item {
+      padding: 20px 0;
+      border-bottom: 1px solid #ccc;
+    }
+  }
+  .comment {
+    .com-haed {
+      padding: 30px 0;
+      p {
+        font-size: 16px;
+        font-weight: bold;
+        padding-bottom: 15px;
+      }
+      .server {
+        color: #f90;
+        .recommend {
+          position: relative;
+          .star {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid #f90;
+            opacity: 0.3;
+            text-align: center;
+            line-height: 70px;
+            font-size: 24px;
+            transform: rotate(-30deg);
+          }
+          .good {
+            position: absolute;
+            top: 26px;
+            left: -22px;
+          }
+        }
+        .circle{
+            position: relative;
+            .circle-item{
+                position: absolute;
+                top: 18px;
+                left: 25px;
+            }
         }
       }
     }
   }
 }
 </style>
-
-
