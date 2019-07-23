@@ -29,31 +29,36 @@
 
         </el-input>
         <!-- 上传图片 -->
-        <el-upload
-          action="http:127.0.0.1:1337/upload"
-          size:small
-          list-type="picture-card"
-          class="upload"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove"
-        >
-          <i class="el-icon-plus"></i>
-        </el-upload>
+       <el-upload
+  action="/upload"
+  list-type="picture-card"
+  :headers="getToken()"
+  :on-success="handleSuccess"
+  :file-list="fileList"
+  :on-preview="handlePictureCardPreview"
+  :on-remove="handleRemove">
+  <i class="el-icon-plus"></i>
+</el-upload>
+<el-dialog :visible.sync="dialogVisible" size="tiny">
+  <img width="100%" :src="dialogImageUrl" alt="">
+</el-dialog>
 
         <!-- 提交按钮 -->
         <el-button
           type="primary"
           class="submit"
+          @click="handleSubmit"
         >提交</el-button>
       </div>
       <!--p]评论列表 -->
       <div class="commentList">
         <li
-          v-for="(item,index) in commentList"
+          v-for="(item,index) in dataList"
           :key="index"
+
         >
           <p><img
-              :src=item.account.defaultAvatar
+              src="http://157.122.54.189:9095/assets/images/avatar.jpg"
               alt=""
               class="userAvatar"
             >
@@ -62,11 +67,9 @@
           </p>
           <p>{{item.content}}</p>
           <img
-            :src=item2
+            src="http://157.122.54.189:9095/uploads/92d94f3bff6c40459bffa3e580368449.jpg"
             alt=""
             class="userImage"
-            v-for="(item2,index2) in item.pics"
-            :key="index2"
           >
         </li>
       </div>
@@ -75,7 +78,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage-0"
+        :current-page="pageIndex-0"
         :page-sizes="[1, 2, 3, 4]"
         :page-size="pageSize-0"
         layout="total, sizes, prev, pager, next, jumper"
@@ -94,13 +97,14 @@ export default {
 
   data() {
     return {
+      fileList:[],
       commentText: "",
-      dialogVisible: "",
-      dialogImageUrl: "",
+       dialogImageUrl: '',
+      dialogVisible: false,
       id: this.$route.query.id,
       total: "",
-      currentPage: "",
-      pageSize: "",
+      pageIndex: 1,
+      pageSize: 1,
       commentList: []
     }
   },
@@ -112,13 +116,32 @@ export default {
 
   },
   methods: {
-    handleRemove(file, fileList) {
+    // getData(){
+    //   return{'files':"picture-card"}
+    // },
+    handleSubmit(){
+      console.log(456);
+      this.$store.commit("post/setCommentListContent",this.commentText)
+      // this.commentList.push(this.commentText)
+    },
+    getToken(){
+      var token =this.$store.state.user.userInfo.token
+      return {'Authorization':token}
+    },
+
+  //  上传成功的钩子函数
+  handleSuccess(response, file, fileList){
+  
+  },
+  handleRemove(file, fileList) {
       console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
+
+
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
       this.pageSize = val
@@ -126,7 +149,7 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      this.currentPage = val
+      this.pageIndex = val
       // this.init()
     },
     handleShoucang() {
@@ -167,27 +190,7 @@ export default {
         }
       })
     },
-  //   computed: {
-  //   dataList() {
-  //   let data= this.$store.state.post.commentLists.slice(
-  //       (this.currentPage - 1) * this.pageSize,
-  //       this.pageSize * this.currentPage
-  //     )
-  //     console.log(data,99888);
-  //     return data
-  //   }
-  // },
-
-  computed: {
-    dataList() {
-      let data = this.$store.state.post.commentLists.slice(
-        (this.currentPage - 1) * this.pageSize,
-        this.pageSize * this.currentPage
-      );
-      console.log(data);
-      return data;
-    }
-  },
+ 
     init(){
        // 获取文章评论数据
     this.$axios({
@@ -200,13 +203,22 @@ export default {
         _start:0,
       }
     }).then(res => {
-      // console.log(res,245);
+      console.log(res,245);
       this.commentList = res.data.data
       console.log(this.commentList, 99);
       this.$store.commit("post/setCommentList",res.data.data)
       this.total = res.data.data.length
     })
     }
+  },
+   computed: {
+    dataList() {
+      return this.commentList.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageSize * this.pageIndex
+      )
+    }
+    
   },
   mounted() {
     this.init()

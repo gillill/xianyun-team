@@ -1,8 +1,8 @@
 <template>
   <div class="right-box">
     <div class="search">
-      <el-input placeholder="请输入内容" v-model="input">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-input placeholder="请输入内容" v-model="input" v-on:keyup.native="handleCity(input)">
+        <el-button slot="append" icon="el-icon-search" @click="handleCity(input)"></el-button>
       </el-input>
       <div class="tuijian">
         推荐:
@@ -12,49 +12,17 @@
 
     <div class="tuijian-gonglue">
       <h2>推荐攻略</h2>
-      <el-button class="tj-btn" type="primary" icon="el-icon-edit">写游记</el-button>
+      <el-button @click="handleYouJi" class="tj-btn" type="primary" icon="el-icon-edit">写游记</el-button>
     </div>
-
-    <!-- 攻略文章 -->
-    <!-- <div>
-      <div class="tj-method" v-for="(item,index) in datas" :key="index">
-        <h3><a href="">{{item.title}}</a></h3>
-        <p><a href="">{{item.summary}}</a></p>
-        <el-row type='flex' justify="space-between" align="center" class="method-imgbox">
-          <a href="" v-for="(items,index) in item.images" v-if="index<3" :key="index"><img :src="items" alt=""></a>
-        </el-row> -->
-
-    <!-- 文章下面烦得一逼的小图标 -->
-    <!-- <el-row type="flex" justify="space-between" class="tj-bottom">
-          <el-row type="flex" align="center">
-            <span class="tj-zuobiao">
-              <i class="el-icon-location-outline"></i>
-              {{item.cityName}}
-            </span>
-            <el-row type="flex" align="center" class="tj-by">
-              by
-              <a href=""><img :src="$axios.defaults.baseURL+item.account.defaultAvatar" alt="" class="user-img"></a>
-              <a href="">{{item.account.nickname}}</a>
-            </el-row>
-            <span class="tj-eyes">
-              <i class="el-icon-view">
-                {{item.watch}}
-              </i>
-            </span>
-          </el-row>
-          <span class="tj-zan">30 赞</span>
-        </el-row>
-      </div>
-    </div> -->
 
     <div class="tj-method" v-for="(item,index) in dataList" :key="index">
       <el-row class="tjone-bot" type="flex" v-if="item.images.length<3">
         <el-col :span="8" class="tj-one">
-          <a href="" v-for="(items,index) in item.images" v-if="index<1" :key="index"><img :src="items" alt=""></a>
+          <a href="" @click.prevent="handleClick(item.id)" v-for="(items,index) in item.images" v-if="index<1" :key="index"><img :src="items" alt=""></a>
         </el-col>
         <el-col :span="16">
           <h3 class="a-hover"><a href="" @click.prevent="handleClick(item.id)">{{item.title}}</a></h3>
-          <p><a href="">{{item.summary}}</a></p>
+          <p><a href="" @click.prevent="handleClick(item.id)">{{item.summary}}</a></p>
           <!-- 文章下面烦得一逼的小图标 -->
           <el-row type="flex" justify="space-between" class="tjone-bottom">
             <el-row type="flex" align="center">
@@ -79,9 +47,9 @@
       </el-row>
       <el-row v-else>
         <h3 class="a-hover"><a href="" @click.prevent="handleClick(item.id)">{{item.title}}</a></h3>
-        <p><a href="">{{item.summary}}</a></p>
+        <p><a href="" @click.prevent="handleClick(item.id)">{{item.summary}}</a></p>
         <el-row type='flex' justify="space-between" align="center" class="method-imgbox">
-          <a href="" v-for="(items,index) in item.images" v-if="index<3" :key="index"><img :src="items" alt=""></a>
+          <a href="" @click.prevent="handleClick(item.id)" v-for="(items,index) in item.images" v-if="index<3" :key="index"><img :src="items" alt=""></a>
         </el-row>
         <!-- 文章下面烦得一逼的小图标 -->
         <el-row type="flex" justify="space-between" class="tj-bottom">
@@ -117,17 +85,6 @@
 
 <script>
 export default {
-  //   props: {
-  //     datas: {
-  //       type: Array,
-  //       default: []
-  //     },
-  //     total: {
-  //       type: Array,
-  //       default: []
-  //     }
-  //   },
-
   data() {
     return {
       input: "",
@@ -160,21 +117,26 @@ export default {
       })
     },
     handleCity(item) {
-      this.$axios({
-        url: '/posts?city=' + item
-      }).then(res => {
-        this.data = res.data.data
-      this.$store.commit('post/setCicy', res.data)
-      })
+      if (!item) {
+        this.$axios({
+          url: '/posts'
+        }).then(res => {
+          this.data = res.data.data
+          this.$store.commit('post/setCicy', res.data)
+        })
+      } else {
+        this.$axios({
+          url: '/posts?city=' + item
+        }).then(res => {
+          this.data = res.data.data
+          this.$store.commit('post/setCicy', res.data)
+        })
+      }
+
     },
-
-    // setDataList() {
-    //   this.dataList = this.data.total.slice(
-    //     (this.pageIndex - 1) * this.pageSize,
-    //     this.pageSize * this.pageIndex
-    //   )
-    // }
-
+    handleYouJi() {
+      this.$router.push('/post/create')
+    }
   },
   mounted() {
     //   console.log(this.$axios);
@@ -185,9 +147,7 @@ export default {
       const { data } = res.data
       this.total = res.data.total
       this.data = data
-      console.log(this.data)
       this.$store.commit('post/setCicy', res.data)
-
     })
   },
   computed: {
@@ -196,7 +156,6 @@ export default {
         (this.pageIndex - 1) * this.pageSize,
         this.pageSize * this.pageIndex
       );
-      console.log(data);
       return data;
     }
   },
