@@ -5,7 +5,7 @@
       <hr>
       <div class="read ">
         <span>攻略:{{postData.updated_at |formatDate}}</span>
-        <span>阅读:{{postData.watch}}</span>
+        <span>阅读:{{watchTimes}}</span>
       </div>
       <!-- 文章具体内容展示 -->
       <div
@@ -26,7 +26,8 @@ export default {
   data() {
     return {
       id: this.$route.query.id - 0,
-      postData: {}
+      postData: {},
+      watchTimes:""
     }
   },
   methods: {
@@ -47,6 +48,9 @@ export default {
   },
   mounted() {
     this.init()
+    this.watchTimes=this.postData.watch+1
+    console.log(watchTimes);
+    
   },
   watch: {
     $route() {

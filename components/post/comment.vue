@@ -122,12 +122,12 @@ export default {
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
       this.pageSize = val
-      this.init()
+      // this.init()
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
       this.currentPage = val
-      this.init()
+      // this.init()
     },
     handleShoucang() {
       this.$axios({
@@ -167,12 +167,25 @@ export default {
         }
       })
     },
-    computed: {
+  //   computed: {
+  //   dataList() {
+  //   let data= this.$store.state.post.commentLists.slice(
+  //       (this.currentPage - 1) * this.pageSize,
+  //       this.pageSize * this.currentPage
+  //     )
+  //     console.log(data,99888);
+  //     return data
+  //   }
+  // },
+
+  computed: {
     dataList() {
-      return this.commentList.slice(
+      let data = this.$store.state.post.commentLists.slice(
         (this.currentPage - 1) * this.pageSize,
         this.pageSize * this.currentPage
-      )
+      );
+      console.log(data);
+      return data;
     }
   },
     init(){
@@ -190,6 +203,7 @@ export default {
       // console.log(res,245);
       this.commentList = res.data.data
       console.log(this.commentList, 99);
+      this.$store.commit("post/setCommentList",res.data.data)
       this.total = res.data.data.length
     })
     }
