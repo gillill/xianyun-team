@@ -3,6 +3,7 @@
     <Search/>
     <Map/>
     <HotelFilters/>
+    <HotelsList :data="hotelsData"/>
   </div>
 </template>
 
@@ -10,15 +11,19 @@
 import Search from "@/components/hotel/search"
 import Map from "@/components/hotel/map"
 import HotelFilters from "@/components/hotel/hotelFilters"
+import HotelsList from "@/components/hotel/hotelsList"
 export default {
   components: {
     Search,
     Map,
-    HotelFilters
+    HotelFilters,
+    HotelsList
   },
   data() {
     return {
-     
+      hotelsData:{
+        dataList:{}
+      }
     }
   },
   methods: {
@@ -26,10 +31,12 @@ export default {
     },
     mounted() {
       this.$axios({
-        url:`/hotels`
+        url:`/hotels`,
+        method:"GET"
       }).then(res=>{
-        console.log(res);
-        
+        // console.log(res);
+        const {data} = res
+        this.hotelsData = data
       })
     }
 }

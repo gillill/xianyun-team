@@ -8,33 +8,71 @@
               <span class="price">价格</span>
               <span class="priceNum">0-4000</span>
             </div>
-              <el-slider v-model="money" max="4000"></el-slider>
+              <el-slider v-model="money" :max="4000"></el-slider>
           </li>
           <li>
             <p>住宿等级</p>
-            <el-dropdown class="level">
+           <el-dropdown   class="level">
               <span class="el-dropdown-link">
-                下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+                不限　　　　　　　　<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown" >
-                <el-dropdown-item>
-                  <i></i>1星
+              <el-dropdown-menu
+             
+               style="width:160px;"  slot="dropdown" >
+                <el-dropdown-item  v-for="(item,index) in this.levels"
+              :key="index">
+                  <i>○</i>{{item.level}}星
                 </el-dropdown-item>
-                <el-dropdown-item>狮子头</el-dropdown-item>
-                <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                <el-dropdown-item>双皮奶</el-dropdown-item>
-                <el-dropdown-item>蚵仔煎</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </li>
           <li>
             <p>住宿类型</p>
+            <el-dropdown   class="level">
+              <span class="el-dropdown-link">
+                不限　　　　　　　　<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu
+               style="width:160px;"  slot="dropdown" >
+                <el-dropdown-item  v-for="(item,index) in this.types"
+              :key="index">
+                  <i>○</i>{{item.name}}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </li>
           <li>
             <p>酒店设施</p>
+            <el-dropdown   class="level">
+              <span class="el-dropdown-link">
+                不限　　　　　　　　<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu
+             
+               style="width:160px;"  slot="dropdown" >
+                <el-dropdown-item  v-for="(item,index) in this.assets"
+              :key="index">
+                  <i>○</i>{{item.name}}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </li>
           <li>
             <p>酒店品牌</p>
+              <el-dropdown   class="level">
+              <span class="el-dropdown-link">
+                不限　　　　　　　　<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu
+              style="width:160px; height:200px; overflow-y:scroll;"
+              slot="dropdown" >
+                <el-dropdown-item 
+                 v-for="(item,index) in this.brands"
+              :key="index">
+                  <i>○</i>{{item.name}}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </li>
         </ul>
       </div>
@@ -46,8 +84,27 @@
 export default {
   data(){
     return{
-      money:4000
+      money:4000,
+      levels:[],
+      types:[],
+      assets:[],
+      brands:[]
     }
+  },
+  mounted () {
+      this.$axios({
+        url:`/hotels/options`,
+        method:"GET"
+      }).then(res=>{
+        // console.log(res);
+        
+        const {data} = res.data;
+        this.assets = data.assets;
+        this.levels = data.levels;
+        this.types = data.types;
+        this.brands = data.brands
+        
+      })
   }
 }
 </script>
@@ -97,7 +154,6 @@ export default {
   }
   .level{
     margin-top: 20px;
-    width:100px;
   }
 </style>
 
