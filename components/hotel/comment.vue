@@ -33,9 +33,6 @@ export default {
       isShow: 1
     };
   },
-<<<<<<< HEAD
-  methods: {
-=======
    mounted () {
     this.$axios({
       url:'/hotels/comments',
@@ -49,7 +46,6 @@ export default {
   },
   methods: {
     
->>>>>>> 3eae080e4bee9533276e4402e325a95c108d3957
     changDis(){
         this.isShow = 3
     },
