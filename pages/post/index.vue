@@ -16,7 +16,6 @@ export default {
     return {
       data:[],
       datas:[],
-      total:[]
     }
   },
   mounted() {
@@ -24,27 +23,9 @@ export default {
       url: '/posts/cities',
       method: 'get',
     }).then(res => {
-      // console.log(res);
-      
       const { data } = res.data
       this.data = data
-      // console.log(this.data)
     })
-    // this.$axios({
-    //   url:'/posts',
-    //   method:'get',
-    // }).then(res=>{
-    //   console.log(res)
-    //   const {data} = res.data
-    //   this.datas = data
-    //   this.total = this.datas.length
-    // })
-    // this.$axios({
-    //   url:'/postkinds',
-    //   method:'get',
-    // }).then(res=>{
-    //   console.log(res)
-    // })
   },
   components: {
     PostLeft,
