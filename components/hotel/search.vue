@@ -3,14 +3,22 @@
       <!-- 面包屑导航 -->
     <div class="mianbaoxie">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-    <el-breadcrumb-item :to="{ path: '/' }">酒店</el-breadcrumb-item>
-    <el-breadcrumb-item>某某市酒店预订</el-breadcrumb-item>
+    <el-breadcrumb-item >酒店</el-breadcrumb-item>
+    <el-breadcrumb-item>{{cityName||"南京"}}市酒店预订</el-breadcrumb-item>
     </el-breadcrumb>
     </div>
     <!-- 搜索栏 -->
       <div class="searchBox">
         <div class="Search">
-        <div class="citySearch"><el-input v-model="cityName" placeholder="请输入城市" ></el-input></div>
+        <div class="citySearch">
+          <el-autocomplete
+            v-model="cityName"
+            @select="handleAimSelect"
+          
+            :fetch-suggestions="queryCitySearch"
+            placeholder="请输入内容"
+          ></el-autocomplete>
+        </div>
         <div class="block">
           <el-date-picker
             v-model="value1"
@@ -30,6 +38,7 @@
         </div>
         <el-button type="primary" @click="lookPrice">查看价格</el-button>
         </div>
+        <!-- 人数选择隐藏域 -->
         <div v-show="show" class="personShow">
             <div class="psTop">
               <div class="psTxt">每间</div>
@@ -129,6 +138,49 @@ export default {
     }
   },
   methods: {
+     
+    // 出发城市输入框获得焦点时触发
+    // value 是选中的值，cb是回调函数，接收要展示的列表
+    queryCitySearch(value, cb) {
+      this.querySearchCity(value).then(arr => {
+        if (arr.length > 0) {
+          this.cityName = arr[0].value
+        }
+        cb(arr)
+      })
+    },
+
+
+    querySearchCity(queryString) {
+      return new Promise((resolve, reject) => {
+        if (!queryString.trim()) {
+          //   隐藏下拉框
+          resolve([])
+          return
+        }
+        this.$axios({
+          url: '/hotels',
+          method:"GET"
+        }).then(res => {
+          console.log(res)
+          const { data } = res.data
+      
+          const newData = data.map(v => {
+            return {
+              ...v,
+              value: v.city.name.replace('市', '')
+            }
+          })
+          resolve(newData)
+        })
+      })
+    },
+
+    // 出发城市下拉选择时触发
+    handleAimSelect(item) {
+      this.cityName = item.value
+    },
+
       certain(){
         const adultNum = this.adultValue
         const childNum = this.childValue
@@ -136,10 +188,11 @@ export default {
         this.show = false
       },
       lookPrice(){
-
+        // this.inpCity = this.cityName
       }
     },
     mounted() {
+    
     }
 }
 </script>

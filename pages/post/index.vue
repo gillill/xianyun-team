@@ -1,17 +1,13 @@
 <template>
   <div class="container">
-    <!-- 左侧导航模块 -->
-    <PostLeft :data='data' />
-
-    <!-- 右侧模块 -->
-    <PostRight :datas='datas' />
+   首页
   </div>
 </template>
 
 <script>
-import PostLeft from '@/components/post/postLeft.vue'
-import PostRight from '@/components/post/postRight.vue'
+
 export default {
+<<<<<<< HEAD
   data() {
     return {
       data:[],
@@ -31,15 +27,8 @@ export default {
     PostLeft,
     PostRight
   }
+=======
+>>>>>>> b97f6f88a55b86893e44b1f16dc49f8f120cab3b
 }
 </script>
-
-<style lang="less" scoped>
-.container {
-  display: flex;
-  width: 1000px;
-  margin: 20px auto 0;
-}
-</style>
-
 

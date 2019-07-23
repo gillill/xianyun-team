@@ -206,8 +206,13 @@ export default {
   p {
     margin: 15px 0 15px 0;
     line-height: 1.5;
+<<<<<<< HEAD
     // font-size: 14px;
     height: 70px;
+=======
+    font-size: 14px;
+    height: 66px;
+>>>>>>> b97f6f88a55b86893e44b1f16dc49f8f120cab3b
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
