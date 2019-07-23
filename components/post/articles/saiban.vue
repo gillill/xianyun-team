@@ -27,7 +27,8 @@ export default {
     return {
       id: this.$route.query.id - 0,
       postData: {},
-      watchTimes:""
+      watchTimes:"",
+      watchNum:0
     }
   },
   methods: {
@@ -42,20 +43,31 @@ export default {
         console.log(this.$route.query);
         this.postData = res.data.data[0]
         this.$store.commit("post/setPostData", res.data.data[0])
-
+           this.watchTimes=this.$store.state.post.postDatas.watch+1
+          console.log(watchNum);
+          
+        // this.$store.commit("post/setPostDataWatch",watchNum)
+        // this.watchTimes=this.$store.state.post.postDatas.watch+1
+        //  let num = ++this.postData.watch-0 
+          // localStorage.setItem("postWatchTimes",num+"")
+            // this.watchTimes=localStorage.getItem("postWatchTimes")
+          // console.log(this.postData.watch-0+1,22);
       })
     }
   },
   mounted() {
     this.init()
-    this.watchTimes=this.postData.watch+1
-    console.log(watchTimes);
+
     
   },
   watch: {
     $route() {
       this.init()
-    }
+    },
+    // watchTimes:function(newVal,oldVal){
+    //     this.watchTimes=newVal
+
+    // }
   },
 
   filters: {

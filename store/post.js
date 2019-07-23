@@ -3,8 +3,8 @@ export const state = () => {
     cityData: {
       data: []
     },
-    postDatas: { like: "" },
-    commentLists:[]
+    postDatas: { like: "",watch:"",},
+    commentLists: []
   };
 };
 
@@ -21,5 +21,11 @@ export const mutations = {
   },
   setCommentList(state, data){
    state.commentLists=data
-    }
+    },
+  setPostDataWatch(state,data){
+    state.postDatas.like = data;
+  },
+  setCommentListContent(state,data){
+
+  }
 };
