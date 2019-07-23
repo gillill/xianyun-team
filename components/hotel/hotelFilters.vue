@@ -8,7 +8,7 @@
               <span class="price">价格</span>
               <span class="priceNum">0-4000</span>
             </div>
-              <el-slider v-model="money" max="4000"></el-slider>
+              <el-slider v-model="money" :max="4000"></el-slider>
           </li>
           <li>
             <p>住宿等级</p>
