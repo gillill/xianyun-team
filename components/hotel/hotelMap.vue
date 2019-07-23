@@ -63,26 +63,26 @@ export default {
   mounted() {
     window.onLoad = function() {
       var map = new AMap.Map("map", {
-        zoom: 13, //放大级别
-        center: [113.395493, 23.124029], //中心点坐标，经纬度
+        // zoom: 13, //放大级别
+        center: [118.22, 31.14], //中心点坐标，经纬度
         viewMode: "3D" //使用3D视图
       });
       // 创建一个 Marker 实例：
       var marker1 = new AMap.Marker({
-        position: new AMap.LngLat(113.395493, 23.124029), 
-        title: "车陂",
+        position: new AMap.LngLat(118.22, 31.14), 
+        title: "黑马",
         icon:
           "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-1.png"
       });
       var marker2 = new AMap.Marker({
-        position: new AMap.LngLat(113.40477, 23.122978), 
-        title: "东圃",
+        position: new AMap.LngLat(118.22, 31.14), 
+        title: "黑马",
         icon:
           "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-2.png"
       });
       var marker3 = new AMap.Marker({
-        position: new AMap.LngLat(113.380577, 23.12661), 
-        title: "棠下",
+        position: new AMap.LngLat(118.22, 31.14), 
+        title: "黑马",
         icon:
           "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-3.png"
       });

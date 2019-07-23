@@ -55,7 +55,7 @@
         <el-col :span="5">入住时间: 14:00之后</el-col>
         <el-col :span="5">离店时间: 12:00之前</el-col>
         <el-col :span="5">2014年开业 / 2014年装修</el-col>
-        <el-col :span="5">酒店规模: 119间客房</el-col>
+        <el-col :span="5">酒店规模: 250间客房</el-col>
       </el-row>
       <el-row class="base-item">
         <el-col :span="4">主要设施</el-col>
@@ -63,11 +63,11 @@
       </el-row>
       <el-row class="base-item">
         <el-col :span="4">停车服务</el-col>
-        <el-col :span="20">-</el-col>
+        <el-col :span="20">倒贴停车</el-col>
       </el-row>
       <el-row class="base-item">
         <el-col :span="4">品牌信息</el-col>
-        <el-col :span="20">-</el-col>
+        <el-col :span="20">你猜</el-col>
       </el-row>
     </div>
     <!-- 评论 -->
@@ -76,9 +76,9 @@
         <p>10条真实用户评论</p>
         <el-row>
           <el-col :span="4">
-            <el-row :span="8">总评数：82</el-row>
-            <el-row :span="8">好评数：14</el-row>
-            <el-row :span="8">差评数：6</el-row>
+            <el-row :span="8">总评数：10</el-row>
+            <el-row :span="8">好评数：10</el-row>
+            <el-row :span="8">差评数：10</el-row>
           </el-col>
           <el-col :span="20">
             <el-row class="server">
@@ -132,17 +132,17 @@
           </el-col>
         </el-row>
       </div>
-      <!-- <Comment /> -->
+      <Comment />
     </div>
   </div>
 </template>
 <script>
 import Hotelmap from "@/components/hotel/hotelMap";
-// import Comment from "@/components/hotel/comment";
+import Comment from "@/components/hotel/comment";
 export default {
   components: {
     Hotelmap,
-    // Comment
+    Comment
   },
   data() {
     return {

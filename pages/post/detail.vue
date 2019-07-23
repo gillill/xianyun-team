@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <!-- 面包屑 -->
-    <el-breadcrumb separator="/" class="breadcrumb">
+    <el-breadcrumb
+      separator="/"
+      class="breadcrumb"
+    >
       <el-breadcrumb-item :to="{ path: '/post' }">旅游攻略</el-breadcrumb-item>
       <el-breadcrumb-item>攻略详情</el-breadcrumb-item>
     </el-breadcrumb>

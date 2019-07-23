@@ -248,7 +248,7 @@ export default {
     margin: 15px 0 15px 0;
     line-height: 1.5;
     font-size: 14px;
-    height: 70px;
+    height: 66px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
