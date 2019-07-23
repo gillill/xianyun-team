@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <footer>
-      <ul>
+      <ul >
         <li><span class="iconfont icon-bianji"></span>
           <p>评论()</p>
         </li>
@@ -30,9 +30,10 @@
         </el-input>
         <!-- 上传图片 -->
        <el-upload
-  action="/upload"
+  action="http://127.0.0.1:1337/upload"
   list-type="picture-card"
-  :headers="getToken()"
+ 
+   name="files"
   :on-success="handleSuccess"
   :file-list="fileList"
   :on-preview="handlePictureCardPreview"
@@ -131,7 +132,8 @@ export default {
 
   //  上传成功的钩子函数
   handleSuccess(response, file, fileList){
-  
+   console.log(file);
+   
   },
   handleRemove(file, fileList) {
       console.log(file, fileList);

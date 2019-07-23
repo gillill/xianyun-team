@@ -74,6 +74,8 @@ export default {
     width: 280px;
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
+    
     .correlation_image {
       img {
         width: 80px;
@@ -82,6 +84,7 @@ export default {
     }
     p {
       margin-bottom: 20px;
+      margin-left:8px;
     }
     .correlation_detail {
       color: #ccc;
